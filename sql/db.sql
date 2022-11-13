@@ -1,4 +1,4 @@
-create database winter_api;
+create database if not exists winter_api;
 
 -- 接口信息表
 create table if not exists winter_api.`interface_info`
@@ -14,7 +14,7 @@ create table if not exists winter_api.`interface_info`
     `user_id` bigint not null comment '创建人ID',
     `create_time` datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     `update_time` datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    `is_deleted` tinyint default 0 not null comment '是否删除(0-未删, 1-已删)'
+    `is_delete` tinyint default 0 not null comment '是否删除(0-未删, 1-已删)'
 ) comment '接口信息表';
 
 insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `method`, `request_header`, `response_header`, `status`, `user_id`) values (2509655528, 'W9', 'Uh', 'www.carley-kerluke.org', 'Put', 'hO', 'H17T', 0, 69916);
@@ -37,6 +37,3 @@ insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `me
 insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `method`, `request_header`, `response_header`, `status`, `user_id`) values (70, 'mExZ0', 'hpCs2', 'www.steven-cassin.biz', 'Get', '3k', 'phM', 0, 7);
 insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `method`, `request_header`, `response_header`, `status`, `user_id`) values (1, 'Mt', 'q3zgu', 'www.morton-senger.co', 'Delete', 'QPws', 'Le1', 0, 20);
 insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `method`, `request_header`, `response_header`, `status`, `user_id`) values (89850, 'dB', 'XGYZ', 'www.jermaine-friesen.net', 'Put', 'wOW', 'Nc5', 1, 4);
-
-use winter_api;
-alter table interface_info change is_deleted is_delete tinyint;

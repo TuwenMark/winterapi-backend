@@ -38,7 +38,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 		Integer status = interfaceInfo.getStatus();
 		// 创建时，所有参数必须非空
 		if (add) {
-			if (StringUtils.isAnyBlank(name, description, url, method, requestHeader, responseHeader) || ObjectUtils.anyNull(status)) {
+			if (StringUtils.isAnyBlank(name, description, url, method, requestHeader, responseHeader)) {
 				throw new BusinessException(ErrorCode.PARAMS_ERROR);
 			}
 		}
