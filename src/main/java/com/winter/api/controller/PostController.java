@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.winter.api.annotation.AuthCheck;
 import com.winter.api.exception.BusinessException;
 import com.winter.api.common.BaseResponse;
-import com.winter.api.common.DeleteRequest;
+import com.winter.api.common.IdRequest;
 import com.winter.api.common.ErrorCode;
 import com.winter.api.common.ResultUtils;
 import com.winter.api.constant.CommonConstant;
@@ -77,7 +77,7 @@ public class PostController {
      * @return
      */
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deletePost(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
+    public BaseResponse<Boolean> deletePost(@RequestBody IdRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
