@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.winter.api.annotation.AuthCheck;
 import com.winter.api.common.BaseResponse;
-import com.winter.api.common.DeleteRequest;
+import com.winter.api.common.IdRequest;
 import com.winter.api.common.ErrorCode;
 import com.winter.api.common.ResultUtils;
 import com.winter.api.constant.CommonConstant;
@@ -14,8 +14,10 @@ import com.winter.api.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.winter.api.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.winter.api.model.entity.InterfaceInfo;
 import com.winter.api.model.entity.User;
+import com.winter.api.model.enums.InterfaceStatusEnum;
 import com.winter.api.service.InterfaceInfoService;
 import com.winter.api.service.UserService;
+import com.winter.winterapiclientsdk.client.NameClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 帖子接口
+ * 接口
  *
  * @author yupi
  */
@@ -40,6 +42,9 @@ public class InterfaceInfoController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private NameClient nameClient;
 
     // region 增删改查
 
@@ -77,7 +82,7 @@ public class InterfaceInfoController {
      * @return
      */
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteInterfaceInfo(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
+    public BaseResponse<Boolean> deleteInterfaceInfo(@RequestBody IdRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -194,6 +199,71 @@ public class InterfaceInfoController {
         return ResultUtils.success(interfaceInfoPage);
     }
 
-    // endregion
+    /**
+     * 发布接口
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                     HttpServletRequest request) {
+        // 1. 参数校验
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 2. 查询是否存在
+        Long id = idRequest.getId();
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
+        if (interfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        if (InterfaceStatusEnum.ONLINE.getValue() == interfaceInfo.getStatus()) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "接口已上线，请勿重复上线");
+        }
+        // 3. 测试接口
+        com.winter.winterapiclientsdk.model.User user = new com.winter.winterapiclientsdk.model.User();
+        user.setUsername("testInterface");
+        String name = nameClient.getNameByPost(user);
+        if (name == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口测试失败");
+        }
+        // 4. 上线接口
+        interfaceInfo.setStatus(InterfaceStatusEnum.ONLINE.getValue());
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 下线接口
+     *
+     * @param idRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                     HttpServletRequest request) {
+        // 1. 参数校验
+        if (idRequest == null || idRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 2. 查询是否存在
+        Long id = idRequest.getId();
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
+        if (interfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        if (InterfaceStatusEnum.ONLINE.getValue() == interfaceInfo.getStatus()) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "接口已上线，请勿重复上线");
+        }
+        // 4. 下线接口
+        interfaceInfo.setStatus(InterfaceStatusEnum.OFFLINE.getValue());
+        boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
 
 }

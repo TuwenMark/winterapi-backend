@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
  */
 public enum InterfaceStatusEnum {
 
-    MALE("上线", 0),
-    FEMALE("下线", 1);
+    ONLINE("下线", 0),
+    OFFLINE("发布", 1);
 
     private final String text;
 
