@@ -17,7 +17,7 @@ public class InterfaceInfo implements Serializable {
     /**
      * 接口ID
      */
-    @TableId
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -39,6 +39,15 @@ public class InterfaceInfo implements Serializable {
      * 接口请求类型
      */
     private String method;
+
+    /**
+     * 请求参数
+     * [
+     *   {"name": "userName","type": "string"}
+     * ]
+     * 如：{"username":"yupi"}
+     */
+    private String requestParams;
 
     /**
      * 请求头

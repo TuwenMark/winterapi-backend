@@ -4,8 +4,8 @@ spring:
   # DataSource Config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #url: jdbc:mysql://192.168.15.134:3306/winter_api
-    url: jdbc:mysql://192.168.61.134:3306/winter_api
+    url: jdbc:mysql://192.168.15.134:3306/winter_api
+    #url: jdbc:mysql://192.168.61.134:3306/winter_api
     username: root
     password: root
   mvc:

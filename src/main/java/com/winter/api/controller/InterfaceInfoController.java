@@ -1,7 +1,9 @@
 package com.winter.api.controller;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.gson.Gson;
 import com.winter.api.annotation.AuthCheck;
 import com.winter.api.common.BaseResponse;
 import com.winter.api.common.IdRequest;
@@ -12,6 +14,7 @@ import com.winter.api.exception.BusinessException;
 import com.winter.api.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.winter.api.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.winter.api.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.winter.api.model.dto.interfaceinfo.InterfaceInvokeRequest;
 import com.winter.api.model.entity.InterfaceInfo;
 import com.winter.api.model.entity.User;
 import com.winter.api.model.enums.InterfaceStatusEnum;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 接口
@@ -114,21 +118,21 @@ public class InterfaceInfoController {
         if (interfaceInfoUpdateRequest == null || interfaceInfoUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        InterfaceInfo interfaceInfo = new InterfaceInfo();
-        BeanUtils.copyProperties(interfaceInfoUpdateRequest, interfaceInfo);
-        // 参数校验
-        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
-        User user = userService.getLoginUser(request);
-        long id = interfaceInfoUpdateRequest.getId();
         // 判断是否存在
+        long id = interfaceInfoUpdateRequest.getId();
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
         if (oldInterfaceInfo == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         // 仅本人或管理员可修改
+        User user = userService.getLoginUser(request);
         if (!oldInterfaceInfo.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        BeanUtils.copyProperties(interfaceInfoUpdateRequest, interfaceInfo);
+        // 参数校验
+        interfaceInfoService.validInterfaceInfo(interfaceInfo, false);
         boolean result = interfaceInfoService.updateById(interfaceInfo);
         return ResultUtils.success(result);
     }
@@ -226,8 +230,12 @@ public class InterfaceInfoController {
         // 3. 测试接口
         com.winter.winterapiclientsdk.model.User user = new com.winter.winterapiclientsdk.model.User();
         user.setUsername("testInterface");
-        String name = nameClient.getNameByPost(user);
-        if (name == null) {
+        try {
+            String name = nameClient.getNameByPost(user);
+            if (name == null) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口测试失败");
+            }
+        } catch (Exception e) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口测试失败");
         }
         // 4. 上线接口
@@ -257,12 +265,47 @@ public class InterfaceInfoController {
         if (interfaceInfo == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
-        if (InterfaceStatusEnum.ONLINE.getValue() == interfaceInfo.getStatus()) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR, "接口已上线，请勿重复上线");
+        if (InterfaceStatusEnum.OFFLINE.getValue() == interfaceInfo.getStatus()) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "接口已下线，请勿重复下线");
         }
-        // 4. 下线接口
+        // 3. 下线接口
         interfaceInfo.setStatus(InterfaceStatusEnum.OFFLINE.getValue());
         boolean result = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 调用接口
+     *
+     * @param interfaceInvokeRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInvokeRequest interfaceInvokeRequest,
+                                                      HttpServletRequest request) {
+        // 1. 参数校验
+        if (interfaceInvokeRequest == null || interfaceInvokeRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 2. 查询是否存在
+        Long id = interfaceInvokeRequest.getId();
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
+        if (interfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "接口不存在");
+        }
+        if (InterfaceStatusEnum.OFFLINE.getValue() == interfaceInfo.getStatus()) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "接口已下线，无法调用");
+        }
+        // 4. 调用接口
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        String userRequestParams = interfaceInvokeRequest.getUserRequestParams();
+        Gson gson = new Gson();
+        com.winter.winterapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.winter.winterapiclientsdk.model.User.class);
+        NameClient nameClient = new NameClient(accessKey, secretKey);
+        String result = nameClient.getNameByPost(user);
         return ResultUtils.success(result);
     }
 

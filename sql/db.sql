@@ -3,11 +3,12 @@ create database if not exists winter_api;
 -- 接口信息表
 create table if not exists winter_api.`interface_info`
 (
-    `id` bigint not null comment '接口ID' primary key,
+    `id` bigint not null comment '接口ID' primary key AUTO_INCREMENT,
     `name` varchar(256) not null comment '接口名称',
     `description` varchar(512) null comment '接口描述',
     `url` varchar(512) not null comment '接口URL地址',
     `method` varchar(256) not null comment '接口请求类型',
+    `request_params` text null comment '接口请求参数',
     `request_header` varchar(256) null comment '请求头',
     `response_header` varchar(256) null comment '响应头',
     `status` tinyint default 0 not null comment '接口发布状态，0——下线，1——上线',
