@@ -5,20 +5,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 接口状态枚举
+ * 用户接口调用状态枚举
  *
  * @author yupi
  */
-public enum InterfaceStatusEnum {
+public enum UserInterfaceInvokeStatusEnum {
 
-    OFFLINE("下线", 0),
-    ONLINE("发布", 1);
+    NORMAL("正常", 0),
+    FORBIDDEN("禁用", 1);
 
     private final String text;
 
     private final int value;
 
-    InterfaceStatusEnum(String text, int value) {
+    UserInterfaceInvokeStatusEnum(String text, int value) {
         this.text = text;
         this.value = value;
     }

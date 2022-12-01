@@ -38,3 +38,17 @@ insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `me
 insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `method`, `request_header`, `response_header`, `status`, `user_id`) values (70, 'mExZ0', 'hpCs2', 'www.steven-cassin.biz', 'Get', '3k', 'phM', 0, 7);
 insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `method`, `request_header`, `response_header`, `status`, `user_id`) values (1, 'Mt', 'q3zgu', 'www.morton-senger.co', 'Delete', 'QPws', 'Le1', 0, 20);
 insert into winter_api.`interface_info` (`id`, `name`, `description`, `url`, `method`, `request_header`, `response_header`, `status`, `user_id`) values (89850, 'dB', 'XGYZ', 'www.jermaine-friesen.net', 'Put', 'wOW', 'Nc5', 1, 4);
+
+create table user_interface_invoke
+(
+    id              bigint auto_increment comment '主键ID' primary key,
+    user_id         bigint not null comment '用户ID',
+    interface_id    bigint not null comment '接口ID',
+    total_num       int    not null comment '总调用次数',
+    rest_num        int    not null comment '剩余调用次数',
+    status          tinyint  default 0                 not null comment '接口调用状态，0——正常，1——禁用',
+    create_time     datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    update_time     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    is_delete       tinyint  default 0                 not null comment '是否删除(0-未删, 1-已删)'
+)
+    comment '用户接口信息调用表' charset = utf8;
