@@ -1,7 +1,7 @@
 package com.winter.api.mapper;
 
-import com.winter.api.model.entity.InterfaceInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.winter.remotecommon.pojo.InterfaceInfo;
 
 /**
 * @author m1869

@@ -1,17 +1,12 @@
 package com.winter.api.service.impl;
 
-import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.winter.api.common.ErrorCode;
 import com.winter.api.exception.BusinessException;
-import com.winter.api.model.entity.InterfaceInfo;
-import com.winter.api.model.entity.Post;
-import com.winter.api.model.enums.InterfaceStatusEnum;
-import com.winter.api.model.enums.PostGenderEnum;
-import com.winter.api.model.enums.PostReviewStatusEnum;
-import com.winter.api.service.InterfaceInfoService;
 import com.winter.api.mapper.InterfaceInfoMapper;
-import org.apache.commons.lang3.ObjectUtils;
+import com.winter.api.model.enums.InterfaceStatusEnum;
+import com.winter.api.service.InterfaceInfoService;
+import com.winter.remotecommon.pojo.InterfaceInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

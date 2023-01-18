@@ -1,7 +1,7 @@
 package com.winter.api.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.winter.api.model.entity.InterfaceInfo;
+import com.winter.remotecommon.pojo.InterfaceInfo;
 
 /**
 * @author m1869

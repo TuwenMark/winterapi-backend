@@ -1,7 +1,8 @@
 package com.winter.api.mapper;
 
-import com.winter.api.model.entity.UserInterfaceInvoke;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.winter.remotecommon.pojo.UserInterfaceInvoke;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author Admin
@@ -11,6 +12,14 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface UserInterfaceInvokeMapper extends BaseMapper<UserInterfaceInvoke> {
 
+	/**
+	 * 统计接口调用次数
+	 *
+	 * @param userId 用户ID
+	 * @param interfaceId 接口ID
+	 * @return 接口调用次数更新结果
+	 */
+	void invokeCount(@Param("userId") Long userId, @Param("interfaceId") Long interfaceId);
 }
 
 

@@ -1,13 +1,12 @@
 package com.winter.api.controller;
 
-import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
 import com.winter.api.annotation.AuthCheck;
 import com.winter.api.common.BaseResponse;
-import com.winter.api.common.IdRequest;
 import com.winter.api.common.ErrorCode;
+import com.winter.api.common.IdRequest;
 import com.winter.api.common.ResultUtils;
 import com.winter.api.constant.CommonConstant;
 import com.winter.api.exception.BusinessException;
@@ -15,11 +14,11 @@ import com.winter.api.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.winter.api.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.winter.api.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.winter.api.model.dto.interfaceinfo.InterfaceInvokeRequest;
-import com.winter.api.model.entity.InterfaceInfo;
-import com.winter.api.model.entity.User;
 import com.winter.api.model.enums.InterfaceStatusEnum;
 import com.winter.api.service.InterfaceInfoService;
 import com.winter.api.service.UserService;
+import com.winter.remotecommon.pojo.InterfaceInfo;
+import com.winter.remotecommon.pojo.User;
 import com.winter.winterapiclientsdk.client.NameClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 接口

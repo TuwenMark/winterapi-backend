@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.winter.api.common.ErrorCode;
 import com.winter.api.exception.BusinessException;
 import com.winter.api.mapper.UserInterfaceInvokeMapper;
-import com.winter.api.model.entity.UserInterfaceInvoke;
 import com.winter.api.model.enums.UserInterfaceInvokeStatusEnum;
 import com.winter.api.service.UserInterfaceInvokeService;
+import com.winter.remotecommon.pojo.UserInterfaceInvoke;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author Admin
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserInterfaceInvokeServiceImpl extends ServiceImpl<UserInterfaceInvokeMapper, UserInterfaceInvoke>
 		implements UserInterfaceInvokeService {
+	@Resource
+	private UserInterfaceInvokeMapper userInterfaceInvokeMapper;
 
 	@Override
 	public void validUserInterfaceInvoke(UserInterfaceInvoke userInterfaceInvoke, boolean add) {
@@ -37,6 +41,14 @@ public class UserInterfaceInvokeServiceImpl extends ServiceImpl<UserInterfaceInv
 		if (status != null && !UserInterfaceInvokeStatusEnum.getValues().contains(status)) {
 			throw new BusinessException(ErrorCode.PARAMS_ERROR);
 		}
+	}
+
+	@Override
+	public void invokeCount(Long userId, Long interfaceId) {
+		if (userId <= 0 || interfaceId <= 0) {
+			throw new BusinessException(ErrorCode.PARAMS_ERROR);
+		}
+		userInterfaceInvokeMapper.invokeCount(userId, interfaceId);
 	}
 }
 

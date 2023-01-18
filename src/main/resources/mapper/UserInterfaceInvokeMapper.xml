@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.winter.api.mapper.UserInterfaceInvokeMapper">
 
-    <resultMap id="BaseResultMap" type="com.winter.api.model.entity.UserInterfaceInvoke">
+    <resultMap id="BaseResultMap" type="com.winter.remotecommon.pojo.UserInterfaceInvoke">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="interfaceId" column="interface_id" jdbcType="BIGINT"/>
@@ -21,4 +21,14 @@
         total_num,rest_num,status,
         create_time,update_time,is_delete
     </sql>
+
+    <update id="invokeCount">
+        update
+            user_interface_invoke
+        set
+            rest_num = rest_num -1, total_num = total_num + 1, update_time = now()
+        where
+              user_id = #{userId} and interface_id = #{interfaceId}
+    </update>
+
 </mapper>

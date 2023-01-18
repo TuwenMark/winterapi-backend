@@ -9,7 +9,7 @@ import com.winter.api.exception.BusinessException;
 import com.winter.api.mapper.UserMapper;
 import com.winter.api.service.UserService;
 import com.winter.api.common.ErrorCode;
-import com.winter.api.model.entity.User;
+import com.winter.remotecommon.pojo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -106,6 +106,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         // 3. 记录用户的登录态
         request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, user);
+        // TODO: 用户登录信息脱敏返回
         return user;
     }
 

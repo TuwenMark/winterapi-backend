@@ -1,7 +1,7 @@
 package com.winter.api.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.winter.api.model.entity.UserInterfaceInvoke;
+import com.winter.remotecommon.pojo.UserInterfaceInvoke;
 
 /**
 * @author Admin
@@ -13,9 +13,18 @@ public interface UserInterfaceInvokeService extends IService<UserInterfaceInvoke
 	/**
 	 * 校验
 	 *
-	 * @param userInterfaceInvoke 用户接口调用信息
+	 * @param userInterfaceInvoke 用户和接口调用信息
 	 * @param add 是否为创建校验
 	 */
 	void validUserInterfaceInvoke(UserInterfaceInvoke userInterfaceInvoke, boolean add);
+
+	/**
+	 * 接口调用统计
+	 *
+	 * @param userId 用户ID
+	 * @param interfaceId 接口ID
+	 * @return 是否调用成功
+	 */
+	void invokeCount(Long userId, Long interfaceId);
 
 }

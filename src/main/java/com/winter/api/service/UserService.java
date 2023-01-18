@@ -2,7 +2,7 @@ package com.winter.api.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.winter.api.model.entity.User;
+import com.winter.remotecommon.pojo.User;
 
 import javax.servlet.http.HttpServletRequest;
 
