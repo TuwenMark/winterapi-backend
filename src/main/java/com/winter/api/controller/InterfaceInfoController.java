@@ -306,5 +306,4 @@ public class InterfaceInfoController {
         String result = nameClient.getNameByPost(user);
         return ResultUtils.success(result);
     }
-
 }

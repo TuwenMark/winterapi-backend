@@ -21,7 +21,7 @@ import com.winter.api.demo.DemoService;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.dubbo.rpc.RpcContext;
 
-//@DubboService
+@DubboService
 public class DemoServiceImpl implements DemoService {
 
     @Override

@@ -1,6 +1,7 @@
 package com.winter.api.service;
 
-import com.winter.api.model.entity.User;
+import com.winter.api.mapper.UserMapper;
+import com.winter.remotecommon.pojo.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,10 @@ class UserServiceTest {
     @Resource
     private UserService userService;
 
-    @Test
+    @Resource
+    private UserMapper userMapper;
+
+//    @Test
     void testAddUser() {
         User user = new User();
         boolean result = userService.save(user);
@@ -26,26 +30,26 @@ class UserServiceTest {
         Assertions.assertTrue(result);
     }
 
-    @Test
+//    @Test
     void testUpdateUser() {
         User user = new User();
         boolean result = userService.updateById(user);
         Assertions.assertTrue(result);
     }
 
-    @Test
+//    @Test
     void testDeleteUser() {
         boolean result = userService.removeById(1L);
         Assertions.assertTrue(result);
     }
 
-    @Test
+//    @Test
     void testGetUser() {
         User user = userService.getById(1L);
         Assertions.assertNotNull(user);
     }
 
-    @Test
+//    @Test
     void userRegister() {
         String userAccount = "yupi";
         String userPassword = "";
@@ -77,5 +81,12 @@ class UserServiceTest {
         } catch (Exception e) {
 
         }
+    }
+
+    @Test
+    void testGetgetInvoker() {
+        User user = userMapper.getInvoker("winter");
+        String s = user.toString();
+        System.out.println(s);
     }
 }

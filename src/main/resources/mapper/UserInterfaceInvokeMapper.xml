@@ -5,19 +5,20 @@
 <mapper namespace="com.winter.api.mapper.UserInterfaceInvokeMapper">
 
     <resultMap id="BaseResultMap" type="com.winter.remotecommon.pojo.UserInterfaceInvoke">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="interfaceId" column="interface_id" jdbcType="BIGINT"/>
-            <result property="totalNum" column="total_num" jdbcType="INTEGER"/>
-            <result property="restNum" column="rest_num" jdbcType="INTEGER"/>
-            <result property="status" column="status" jdbcType="TINYINT"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="interfaceId" column="interface_id" jdbcType="BIGINT"/>
+        <result property="totalNum" column="total_num" jdbcType="INTEGER"/>
+        <result property="restNum" column="rest_num" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,user_id,interface_id,
+        id
+        ,user_id,interface_id,
         total_num,rest_num,status,
         create_time,update_time,is_delete
     </sql>
@@ -25,10 +26,17 @@
     <update id="invokeCount">
         update
             user_interface_invoke
-        set
-            rest_num = rest_num -1, total_num = total_num + 1, update_time = now()
-        where
-              user_id = #{userId} and interface_id = #{interfaceId}
+        set rest_num    = rest_num - 1,
+            total_num   = total_num + 1,
+            update_time = now()
+        where user_id = #{userId}
+          and interface_id = #{interfaceId}
     </update>
+    <select id="getInvokeInfo" resultType="com.winter.remotecommon.pojo.UserInterfaceInvoke">
+        select *
+        from user_interface_invoke
+        where user_id = #{userId}
+          and interface_id = #{interfaceId}
+    </select>
 
 </mapper>

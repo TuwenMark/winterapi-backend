@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan("com/winter/api/mapper")
-//@EnableDubbo()
+@EnableDubbo()
 public class WinterApiApplication {
 
     public static void main(String[] args) {

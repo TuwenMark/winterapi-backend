@@ -20,6 +20,15 @@ public interface UserInterfaceInvokeMapper extends BaseMapper<UserInterfaceInvok
 	 * @return 接口调用次数更新结果
 	 */
 	void invokeCount(@Param("userId") Long userId, @Param("interfaceId") Long interfaceId);
+
+	/**
+	 * 查询是否存在调用信息
+	 *
+	 * @param userId 用户ID
+	 * @param interfaceId 接口ID
+	 * @return 用户接口调用信息
+	 */
+	UserInterfaceInvoke getInvokeInfo(@Param("userId") Long userId, @Param("interfaceId") Long interfaceId);
 }
 
 
