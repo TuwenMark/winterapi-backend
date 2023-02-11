@@ -38,5 +38,13 @@
         where user_id = #{userId}
           and interface_id = #{interfaceId}
     </select>
+    <select id="listTopInterfaceInvoke" resultType="com.winter.api.model.vo.InterfaceInvokeVO">
+        select name interface_name, total_num
+        from interface_info t1
+                 join (
+            select interface_id, sum(total_num) total_num from user_interface_invoke group by interface_id) t2
+                      on t1.id = t2.interface_id
+        order by total_num desc limit #{topN};
+    </select>
 
 </mapper>

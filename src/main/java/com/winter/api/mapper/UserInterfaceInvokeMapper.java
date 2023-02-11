@@ -1,8 +1,11 @@
 package com.winter.api.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.winter.api.model.vo.InterfaceInvokeVO;
 import com.winter.remotecommon.pojo.UserInterfaceInvoke;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author Admin
@@ -29,6 +32,13 @@ public interface UserInterfaceInvokeMapper extends BaseMapper<UserInterfaceInvok
 	 * @return 用户接口调用信息
 	 */
 	UserInterfaceInvoke getInvokeInfo(@Param("userId") Long userId, @Param("interfaceId") Long interfaceId);
+
+	/**
+	 * 列出top n调用次数的接口
+	 *
+	 * @return 接口调用分析信息
+	 */
+	List<InterfaceInvokeVO> listTopInterfaceInvoke(Integer topN);
 }
 
 
